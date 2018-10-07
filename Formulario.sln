@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2000
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formulario.Data", "Formulario.Data\Formulario.Data.csproj", "{6F9B8871-E497-4D78-9D40-A8C22B5650D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formulario.Business", "Formulario.Business\Formulario.Business.csproj", "{C5359E18-0C28-4C83-AACB-C3E45DD091C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formulario.WebApi.Tests", "Formulario.WebApi.Tests\Formulario.WebApi.Tests.csproj", "{7BA75111-F0E3-41E5-B13D-58E4A5BF24F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formulario.WebApi2", "Formulario.WebApi2\Formulario.WebApi2.csproj", "{4D1FFFEC-DDB5-41E6-B3E6-CBC83A537858}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6F9B8871-E497-4D78-9D40-A8C22B5650D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F9B8871-E497-4D78-9D40-A8C22B5650D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F9B8871-E497-4D78-9D40-A8C22B5650D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F9B8871-E497-4D78-9D40-A8C22B5650D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5359E18-0C28-4C83-AACB-C3E45DD091C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5359E18-0C28-4C83-AACB-C3E45DD091C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5359E18-0C28-4C83-AACB-C3E45DD091C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5359E18-0C28-4C83-AACB-C3E45DD091C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BA75111-F0E3-41E5-B13D-58E4A5BF24F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BA75111-F0E3-41E5-B13D-58E4A5BF24F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BA75111-F0E3-41E5-B13D-58E4A5BF24F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BA75111-F0E3-41E5-B13D-58E4A5BF24F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D1FFFEC-DDB5-41E6-B3E6-CBC83A537858}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D1FFFEC-DDB5-41E6-B3E6-CBC83A537858}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D1FFFEC-DDB5-41E6-B3E6-CBC83A537858}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D1FFFEC-DDB5-41E6-B3E6-CBC83A537858}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5EB30474-94D5-431F-9CD1-4F3B077D8389}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://hernandesjunio.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Formulario.Data\\Formulario.Data.csproj
+		SccProjectName1 = Formulario.Data
+		SccLocalPath1 = Formulario.Data
+		SccProjectUniqueName2 = Formulario.Business\\Formulario.Business.csproj
+		SccProjectName2 = Formulario.Business
+		SccLocalPath2 = Formulario.Business
+		SccProjectUniqueName3 = Formulario.WebApi.Tests\\Formulario.WebApi.Tests.csproj
+		SccProjectName3 = Formulario.WebApi.Tests
+		SccLocalPath3 = Formulario.WebApi.Tests
+		SccProjectUniqueName4 = Formulario.WebApi2\\Formulario.WebApi2.csproj
+		SccProjectName4 = Formulario.WebApi2
+		SccLocalPath4 = Formulario.WebApi2
+	EndGlobalSection
+EndGlobal

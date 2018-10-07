@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C5359E18-0C28-4C83-AACB-C3E45DD091C2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Formulario.Business</RootNamespace>
+    <AssemblyName>Formulario.Business</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Linq.Dynamic, Version=1.0.6132.35681, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Linq.Dynamic.1.0.7\lib\net40\System.Linq.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\TipoPerguntaAttribute.cs" />
+    <Compile Include="Class\Anexo.cs" />
+    <Compile Include="Class\ColumnFilter.cs" />
+    <Compile Include="Class\CommandImpl.cs" />
+    <Compile Include="Class\Filter.cs" />
+    <Compile Include="Class\PredicateBuilder.cs" />
+    <Compile Include="Class\TipoEntrada.cs" />
+    <Compile Include="Class\TipoOperacaoCondicional.cs" />
+    <Compile Include="Class\TipoPergunta.cs" />
+    <Compile Include="Class\TipoValidador.cs" />
+    <Compile Include="ComplexProperties\ControleUsuario.cs" />
+    <Compile Include="DTO\LeiautePerguntaDTO.cs" />
+    <Compile Include="DTO\LeiautePerguntaItemDTO.cs" />
+    <Compile Include="DTO\LinhasGradeDTO.cs" />
+    <Compile Include="DTO\ModeloFormularioDTO.cs" />
+    <Compile Include="DTO\OpcaoDTO.cs" />
+    <Compile Include="DTO\PerguntaCondicionalDTO.cs" />
+    <Compile Include="DTO\PerguntaDTO.cs" />
+    <Compile Include="DTO\RespostaDTO.cs" />
+    <Compile Include="DTO\RespostaGradeDTO.cs" />
+    <Compile Include="DTO\RespostaModeloFormularioDTO.cs" />
+    <Compile Include="Enumeradores\eColunas.cs" />
+    <Compile Include="Enumeradores\eOperacaoCondicional.cs" />
+    <Compile Include="Enumeradores\eTamanhoTela.cs" />
+    <Compile Include="Enumeradores\eTipoEntrada.cs" />
+    <Compile Include="Enumeradores\eTipoPergunta.cs" />
+    <Compile Include="Enumeradores\eTipoValidador.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Formulario\ModeloDeFormulario.cs" />
+    <Compile Include="Formulario\RespostaModeloDeFormulario.cs" />
+    <Compile Include="Interfaces\ICommandPattern.cs" />
+    <Compile Include="Interfaces\IServicePattern.cs" />
+    <Compile Include="Services\IFormularioService.cs" />
+    <Compile Include="Leiaute\LeiautePergunta.cs" />
+    <Compile Include="Leiaute\LeiautePerguntaItem.cs" />
+    <Compile Include="Services\FormularioService.cs" />
+    <Compile Include="Perguntas\Concicional\PerguntaCondicional.cs" />
+    <Compile Include="Perguntas\Concicional\PerguntaCondicionalAnexo.cs" />
+    <Compile Include="Perguntas\Concicional\PerguntaCondicionalData.cs" />
+    <Compile Include="Perguntas\Concicional\PerguntaCondicionalGrade.cs" />
+    <Compile Include="Perguntas\Concicional\PerguntaCondicionalMultipla.cs" />
+    <Compile Include="Perguntas\Concicional\PerguntaCondicionalNumero.cs" />
+    <Compile Include="Perguntas\Concicional\PerguntaCondicionalOpcoes.cs" />
+    <Compile Include="Perguntas\Concicional\PerguntaCondicionalOpcoesMultipla.cs" />
+    <Compile Include="Perguntas\Concicional\PerguntaCondicionalTexto.cs" />
+    <Compile Include="Perguntas\Concicional\PerguntaCondicionalUnica.cs" />
+    <Compile Include="Perguntas\Misc\ItemPerguntaGrade.cs" />
+    <Compile Include="Perguntas\Misc\Opcao.cs" />
+    <Compile Include="Perguntas\Misc\OpcaoAtivacao.cs" />
+    <Compile Include="Perguntas\Pergunta.cs" />
+    <Compile Include="Perguntas\PerguntaAnexo.cs" />
+    <Compile Include="Perguntas\PerguntaComOpcoes.cs" />
+    <Compile Include="Perguntas\PerguntaData.cs" />
+    <Compile Include="Perguntas\PerguntaEndereco.cs" />
+    <Compile Include="Perguntas\PerguntaEscolhaUnica.cs" />
+    <Compile Include="Perguntas\PerguntaGradeDeOpcoes.cs" />
+    <Compile Include="Perguntas\PerguntaMultiplaEscolha.cs" />
+    <Compile Include="Perguntas\PerguntaNumero.cs" />
+    <Compile Include="Perguntas\PerguntaTexto.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepositoryPattern\IDatabaseContext.cs" />
+    <Compile Include="RepositoryPattern\IDatabaseFactory.cs" />
+    <Compile Include="RepositoryPattern\IRepository.cs" />
+    <Compile Include="RepositoryPattern\IUnitOfWOrkGeneric.cs" />
+    <Compile Include="Respostas\OpcaoRespondida.cs" />
+    <Compile Include="Respostas\Resposta.cs" />
+    <Compile Include="Respostas\RespostaAnexo.cs" />
+    <Compile Include="Respostas\RespostaAnexoContent.cs" />
+    <Compile Include="Respostas\RespostaData.cs" />
+    <Compile Include="Respostas\RespostaGrade.cs" />
+    <Compile Include="Respostas\RespostaLinhaPerguntaGrade.cs" />
+    <Compile Include="Respostas\RespostaMultipla.cs" />
+    <Compile Include="Respostas\RespostaNumero.cs" />
+    <Compile Include="Respostas\RespostaTexto.cs" />
+    <Compile Include="Respostas\RespostaUnica.cs" />
+    <Compile Include="Validators\CNPJ.cs" />
+    <Compile Include="Validators\CPF.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
