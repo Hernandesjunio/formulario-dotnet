@@ -22,11 +22,11 @@ namespace Formulario.Business.DTO
         /// <summary>
         /// Tamanho da tela a ser renderizado
         /// </summary>
-        public eTamanhoTela Responsivo { get; set; }
+        public eTamanhoTela TamanhoTela { get; set; }
 
         /// <summary>
         /// Quantas colunas a pergunta ocupará
         /// </summary>
-        public eColunas Tamanho { get; set; }
+        public eColunas Coluna { get; set; }
     }
 }

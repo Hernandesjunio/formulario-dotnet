@@ -39,7 +39,7 @@ namespace Formulario.Business.Perguntas
             this.PerguntaCondicionalID = perguntaDTO.PerguntaCondicionalID;
             this.Obrigatorio = perguntaDTO.Obrigatorio;
             this.TipoEntradaID = perguntaDTO.TipoEntrada;
-            this.TipoValidadorID = (eTipoValidador?)perguntaDTO.Validador;
+            this.TipoValidadorID = (eTipoValidador?)perguntaDTO.ValidadorID;
             this.ControleAtualizacao = new ControleUsuario { UsuarioID = perguntaDTO.UsuarioID, Data = DateTime.Now };
             return this;
         }

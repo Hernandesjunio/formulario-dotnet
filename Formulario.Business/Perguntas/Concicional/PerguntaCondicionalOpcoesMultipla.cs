@@ -32,6 +32,11 @@ namespace Formulario.Business.Perguntas.Concicional
                     condicao = obj.OpcoesEscolhida.Any() == false && opcoes.Any() == false ||
                                obj.OpcoesEscolhida.Select(d => d.OpcaoID).OrderBy(d => d).ToList().Equals(opcoes);
                     break;
+                //Não contenha elementos no esperado e escolhido ou elementos iguais
+                case eOperacaoCondicional.MultiplaOpcoes_Diferente:
+                    condicao = obj.OpcoesEscolhida.Count != opcoes.Count ||
+                               obj.OpcoesEscolhida.Select(d => d.OpcaoID).OrderBy(d => d).ToList().Equals(opcoes) == false;
+                    break;
                 default:
                     break;
             }

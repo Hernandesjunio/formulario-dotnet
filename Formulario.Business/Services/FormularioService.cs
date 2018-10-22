@@ -1,18 +1,14 @@
-﻿using Formulario.ComplexProperties;
-using Formulario.Business.DTO;
-using Formulario;
-using Formulario.Business;
-using Formulario.Business.Interfaces;
+﻿using Formulario.Business.DTO;
 using Formulario.Business.Leiaute;
 using Formulario.Business.Perguntas;
 using Formulario.Business.Perguntas.Concicional;
 using Formulario.Business.Perguntas.Misc;
 using Formulario.Business.RepositoryPattern;
 using Formulario.Business.Respostas;
+using Formulario.ComplexProperties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Formulario.Business
@@ -30,7 +26,7 @@ namespace Formulario.Business
 
         public IQueryable<ModeloDeFormulario> BuscarModeloDeFormulario(bool trackingChanges = true)
         {
-            using (var repo = factory.Get().GetRepository<ModeloDeFormulario>())
+            using (IRepository<ModeloDeFormulario> repo = factory.Get().GetRepository<ModeloDeFormulario>())
             {
                 return repo.GetQuery(trackingChanges);
             }
@@ -38,7 +34,7 @@ namespace Formulario.Business
 
         public IQueryable<RespostaModeloDeFormulario> BuscarRespostaModeloDeFormulario(bool trackingChanges = true)
         {
-            using (var repo = factory.Get().GetRepository<RespostaModeloDeFormulario>())
+            using (IRepository<RespostaModeloDeFormulario> repo = factory.Get().GetRepository<RespostaModeloDeFormulario>())
             {
                 return repo.GetQuery(trackingChanges);
             }
@@ -46,7 +42,7 @@ namespace Formulario.Business
 
         public IQueryable<Resposta> BuscarResposta(bool trackingChanges = true)
         {
-            using (var repo = factory.Get().GetRepository<Resposta>())
+            using (IRepository<Resposta> repo = factory.Get().GetRepository<Resposta>())
             {
                 return repo.GetQuery(trackingChanges);
             }
@@ -54,7 +50,7 @@ namespace Formulario.Business
 
         public ModeloFormularioDTO AbrirFormulario(long modeloFormularioID)
         {
-            var modelo = BuscarModeloDeFormulario().Single(c => c.ModeloFormularioID == modeloFormularioID);
+            ModeloDeFormulario modelo = BuscarModeloDeFormulario().Single(c => c.ModeloFormularioID == modeloFormularioID);
 
             return new ModeloFormularioDTO
             {
@@ -66,9 +62,9 @@ namespace Formulario.Business
         }
         public RespostaModeloFormularioDTO AbrirRespostaModeloFormulario(long respostaModeloFormularioID)
         {
-            var respostaModeloFormulario = BuscarRespostaModeloDeFormulario().Single(c => c.RespostaModeloFormularioID == respostaModeloFormularioID);
+            RespostaModeloDeFormulario respostaModeloFormulario = BuscarRespostaModeloDeFormulario().Single(c => c.RespostaModeloFormularioID == respostaModeloFormularioID);
 
-            var respostaModelo = new DTO.RespostaModeloFormularioDTO
+            RespostaModeloFormularioDTO respostaModelo = new DTO.RespostaModeloFormularioDTO
             {
                 ModeloFormulario = AbrirFormulario(respostaModeloFormulario.ModeloDeFormularioID),
                 RespostaModeloFormularioID = respostaModeloFormulario.RespostaModeloFormularioID,
@@ -80,9 +76,9 @@ namespace Formulario.Business
 
         public RespostaModeloFormularioDTO ResponderFormulario(long modeloFormularioID)
         {
-            var modelo = BuscarModeloDeFormulario().Single(c => c.ModeloFormularioID == modeloFormularioID);
+            ModeloDeFormulario modelo = BuscarModeloDeFormulario().Single(c => c.ModeloFormularioID == modeloFormularioID);
 
-            var respostaModelo = new DTO.RespostaModeloFormularioDTO
+            RespostaModeloFormularioDTO respostaModelo = new DTO.RespostaModeloFormularioDTO
             {
                 Respostas = modelo.Perguntas.Select(c => new RespostaDTO
                 {
@@ -90,6 +86,11 @@ namespace Formulario.Business
                                                                     .Select(d => new RespostaGradeDTO { LinhaPerguntaGradeID = d.LinhaPerguntaGradeID, OpcaoRespondidaID = new long?() }).ToList() :
                                                                     null,
                     Valor = null,
+                    Extensao = null,
+                    NomeArquivo = null,
+                    OpcaoID = null,
+                    Opcoes = null,
+                    UsuarioID = null,
                     PerguntaID = c.PerguntaID,
                     RespostaID = 0,
                 }).ToList(),
@@ -101,31 +102,35 @@ namespace Formulario.Business
 
         public void ExcluirPergunta(long PerguntaID)
         {
-            using (var repo = factory.Get().GetRepository<Pergunta>())
+            using (IRepository<Pergunta> repo = factory.Get().GetRepository<Pergunta>())
             {
-                var p = repo.GetQuery().Single(c => c.PerguntaID == PerguntaID);
+                Pergunta p = repo.GetQuery().Single(c => c.PerguntaID == PerguntaID);
                 repo.Delete(p);
             }
         }
 
         public void ExcluirPerguntaCondicional(long PerguntaCondicionalID)
         {
-            using (var repo = factory.Get().GetRepository<PerguntaCondicional>())
+            using (IRepository<PerguntaCondicional> repo = factory.Get().GetRepository<PerguntaCondicional>())
             {
-                var p = repo.GetQuery().Single(c => c.PerguntaID == PerguntaCondicionalID);
+                PerguntaCondicional p = repo.GetQuery().Single(c => c.PerguntaID == PerguntaCondicionalID);
                 repo.Delete(p);
             }
         }
 
         public PerguntaCondicional GravarPerguntaCondicional(PerguntaCondicionalDTO condicional, Pergunta pergunta, string UsuarioID)
         {
-            using (var repo = factory.Get().GetRepository<PerguntaCondicional>())
+            using (IRepository<PerguntaCondicional> repo = factory.Get().GetRepository<PerguntaCondicional>())
             {
                 PerguntaCondicional perguntaCondicional;
                 if (condicional.PerguntaCondicionalID > 0)
+                {
                     perguntaCondicional = repo.GetQuery().SingleOrDefault(c => c.PerguntaID == condicional.PerguntaCondicionalID).AtribuirCondicional(condicional, pergunta);
+                }
                 else
+                {
                     perguntaCondicional = repo.Insert(CriarPerguntaCondicional(condicional, pergunta));
+                }
 
                 perguntaCondicional.ControleAtualizacao = ControleUsuario.Criar(UsuarioID);
 
@@ -135,7 +140,7 @@ namespace Formulario.Business
 
         public IQueryable<Opcao> BuscarOpcao(bool trackingChanges = true)
         {
-            using (var repo = factory.Get().GetRepository<Opcao>())
+            using (IRepository<Opcao> repo = factory.Get().GetRepository<Opcao>())
             {
                 return repo.GetQuery(trackingChanges);
             }
@@ -145,13 +150,17 @@ namespace Formulario.Business
         {
             try
             {
-                using (var repo = factory.Get().GetRepository<Pergunta>())
+                using (IRepository<Pergunta> repo = factory.Get().GetRepository<Pergunta>())
                 {
                     Pergunta pergunta;
                     if (perguntaDTO.PerguntaID > 0)
+                    {
                         pergunta = repo.GetQuery().Single(c => c.PerguntaID == perguntaDTO.PerguntaID).AtribuirPergunta(perguntaDTO);
+                    }
                     else
+                    {
                         pergunta = repo.Insert(CriarPergunta(perguntaDTO));
+                    }
 
                     pergunta.ControleAtualizacao = ControleUsuario.Criar(UsuarioID);
 
@@ -167,12 +176,16 @@ namespace Formulario.Business
         public ModeloDeFormulario GravarModeloFormulario(ModeloFormularioDTO modeloDTO, string UsuarioID)
         {
             ModeloDeFormulario modelo;
-            using (var repo = factory.Get().GetRepository<ModeloDeFormulario>())
+            using (IRepository<ModeloDeFormulario> repo = factory.Get().GetRepository<ModeloDeFormulario>())
             {
                 if (modeloDTO.ModeloFormularioID > 0)
+                {
                     modelo = BuscarModeloDeFormulario().Single(c => c.ModeloFormularioID == modeloDTO.ModeloFormularioID);
+                }
                 else
+                {
                     modelo = repo.Insert(CreateInstance<ModeloDeFormulario>());
+                }
 
                 modelo.Descricao = modeloDTO.Descricao;
                 modelo.Html = modeloDTO.Html;
@@ -182,48 +195,50 @@ namespace Formulario.Business
                 modeloDTO.Perguntas.AtribuirUsuarioID(UsuarioID);
 
                 //Perguntas novas
-                foreach (var perguntaDTO in modeloDTO.Perguntas.Where(c => c.PerguntaID <= 0 || !modelo.Perguntas.Any(d => d.PerguntaID == c.PerguntaID)))
+                foreach (PerguntaDTO perguntaDTO in modeloDTO.Perguntas.Where(c => c.PerguntaID <= 0 || !modelo.Perguntas.Any(d => d.PerguntaID == c.PerguntaID)))
                 {
-                    var pergunta = GravarPergunta(perguntaDTO, UsuarioID);
+                    Pergunta pergunta = GravarPergunta(perguntaDTO, UsuarioID);
                     pergunta.ModeloDeFormulario = modelo;
 
                     modelo.Perguntas.Add(pergunta);
 
                     if (perguntaDTO.PerguntaCondicional != null)
                     {
-                        var perguntaOrigem = modelo.Perguntas.Single(c => c.PerguntaID == perguntaDTO.PerguntaCondicional.PerguntaID);
-                        var pCondicional = GravarPerguntaCondicional(perguntaDTO.PerguntaCondicional, perguntaOrigem, UsuarioID);
+                        Pergunta perguntaOrigem = modelo.Perguntas.Single(c => c.PerguntaID == perguntaDTO.PerguntaCondicional.PerguntaID);
+                        PerguntaCondicional pCondicional = GravarPerguntaCondicional(perguntaDTO.PerguntaCondicional, perguntaOrigem, UsuarioID);
                         pergunta.PerguntaCondicional = pCondicional;
                     }
 
-                    foreach (var leiautePerguntaDTO in perguntaDTO.LeiautePergunta.ToList())
+                    foreach (LeiautePerguntaDTO leiautePerguntaDTO in perguntaDTO.LeiautesPergunta.ToList())
                     {
-                        var leiautePergunta = CriarLeiautePergunta(leiautePerguntaDTO);
+                        LeiautePergunta leiautePergunta = CriarLeiautePergunta(leiautePerguntaDTO);
                         //grava o leiaute vinculado à pergunta
                         GravarLeiautePergunta(leiautePergunta, UsuarioID);
                     }
 
-                    if (perguntaDTO.LeiautePergunta.Any() == false)
+                    if (perguntaDTO.LeiautesPergunta.Any() == false)
+                    {
                         GravarLeiautePergunta(LeiautePergunta.LeiautePadrao(pergunta), UsuarioID);
+                    }
                 }
 
                 //Perguntas atualizadas
-                foreach (var pergunta in modelo.Perguntas.ToList())
+                foreach (Pergunta pergunta in modelo.Perguntas.ToList())
                 {
                     pergunta.ModeloDeFormulario = modelo;
                     //tracking changes
-                    var perguntaDTO = modeloDTO.Perguntas.SingleOrDefault(d => d.PerguntaID == pergunta.PerguntaID);
+                    PerguntaDTO perguntaDTO = modeloDTO.Perguntas.SingleOrDefault(d => d.PerguntaID == pergunta.PerguntaID);
                     if (perguntaDTO.Deleted)
                     {
-                        var perguntasCondicionais = modelo.Perguntas.Where(c => c.PerguntaCondicionalID == perguntaDTO.PerguntaID).ToList();
+                        List<Pergunta> perguntasCondicionais = modelo.Perguntas.Where(c => c.PerguntaCondicionalID == perguntaDTO.PerguntaID).ToList();
 
-                        foreach (var pCondicional in perguntasCondicionais)
+                        foreach (Pergunta pCondicional in perguntasCondicionais)
                         {
                             //remove o vínculo, operações e valor de ativação
                             pCondicional.RemoverCondicional();
                         }
 
-                        foreach (var leiautePergunta in pergunta.LeiautePerguntas.ToList())
+                        foreach (LeiautePergunta leiautePergunta in pergunta.LeiautePerguntas.ToList())
                         {
                             //remove o leiaute vinculado à pergunta
                             ExcluirLeiautePergunta(leiautePergunta.LeiautePerguntaID);
@@ -244,10 +259,10 @@ namespace Formulario.Business
                         }
                         else if (perguntaDTO.PerguntaCondicionalID.HasValue)
                         {
-                            var condicional = GravarPerguntaCondicional(perguntaDTO.PerguntaCondicional, pergunta, UsuarioID);
+                            PerguntaCondicional condicional = GravarPerguntaCondicional(perguntaDTO.PerguntaCondicional, pergunta, UsuarioID);
                         }
 
-                        foreach (var leiautePergunta in pergunta.LeiautePerguntas.ToList())
+                        foreach (LeiautePergunta leiautePergunta in pergunta.LeiautePerguntas.ToList())
                         {
                             //grava o leiaute vinculado à pergunta
                             GravarLeiautePergunta(leiautePergunta, UsuarioID);
@@ -263,29 +278,37 @@ namespace Formulario.Business
 
             try
             {
-                using (var repo = factory.Get().GetRepository<Resposta>())
-                using (var repoRespostaModelo = factory.Get().GetRepository<RespostaModeloDeFormulario>())
-                using (var repoPergunta = factory.Get().GetRepository<Pergunta>())
+                using (IRepository<Resposta> repo = factory.Get().GetRepository<Resposta>())
+                using (IRepository<RespostaModeloDeFormulario> repoRespostaModelo = factory.Get().GetRepository<RespostaModeloDeFormulario>())
+                using (IRepository<Pergunta> repoPergunta = factory.Get().GetRepository<Pergunta>())
                 {
                     RespostaModeloDeFormulario respostaModeloFormulario;
                     if (respostaModeloDTO.RespostaModeloFormularioID > 0)
+                    {
                         respostaModeloFormulario = BuscarRespostaModeloDeFormulario().Single(c => c.RespostaModeloFormularioID == respostaModeloDTO.RespostaModeloFormularioID);
+                    }
                     else
+                    {
                         respostaModeloFormulario = repoRespostaModelo.Insert(CreateInstance<RespostaModeloDeFormulario>());
+                    }
 
                     respostaModeloFormulario.ModeloDeFormularioID = respostaModeloDTO.ModeloFormulario.ModeloFormularioID;
 
                     respostaModeloFormulario.ControleAtualizacao = ControleUsuario.Criar(UsuarioID);
 
-                    foreach (var respostaDTO in respostaModeloDTO.Respostas.OrderBy(c => c.PerguntaID).ToList())
+                    foreach (RespostaDTO respostaDTO in respostaModeloDTO.Respostas.OrderBy(c => c.PerguntaID).ToList())
                     {
-                        var pergunta = respostaModeloDTO.ModeloFormulario.Perguntas.Single(c => c.PerguntaID == respostaDTO.PerguntaID);
+                        PerguntaDTO pergunta = respostaModeloDTO.ModeloFormulario.Perguntas.Single(c => c.PerguntaID == respostaDTO.PerguntaID);
 
                         Resposta resposta;
                         if (respostaDTO.RespostaID > 0)
+                        {
                             resposta = BuscarResposta().Single(c => c.RespostaID == respostaDTO.RespostaID).AtribuirResposta(respostaDTO);
+                        }
                         else
+                        {
                             resposta = repo.Insert(CriarResposta(respostaDTO, pergunta.TipoPergunta));
+                        }
 
                         resposta.Pergunta = repoPergunta.GetQuery().Single(d => d.PerguntaID == resposta.PerguntaID);
                         resposta.RespostaModeloDeFormulario = respostaModeloFormulario;
@@ -294,13 +317,13 @@ namespace Formulario.Business
                         respostaModeloFormulario.Respostas.Add(resposta);
                     }
 
-                    foreach (var resposta in respostaModeloFormulario.Respostas)
+                    foreach (Resposta resposta in respostaModeloFormulario.Respostas)
                     {
                         bool validarResposta = true;
 
                         if (resposta.Pergunta.PerguntaCondicionalID.HasValue)
                         {
-                            var respostaOrigem = respostaModeloFormulario.Respostas.Single(d => d.PerguntaID == resposta.Pergunta.PerguntaCondicional.PerguntaID);
+                            Resposta respostaOrigem = respostaModeloFormulario.Respostas.Single(d => d.PerguntaID == resposta.Pergunta.PerguntaCondicional.PerguntaID);
 
                             validarResposta = resposta.Pergunta.PerguntaCondicional.VerificarAtivacaoCondicional(respostaOrigem);
                         }
@@ -322,11 +345,11 @@ namespace Formulario.Business
 
         private void GravarLeiautePergunta(LeiautePergunta leiautePergunta, string UsuarioID)
         {
-            var result = BuscarLeiautePergunta().SingleOrDefault(d => d.LeiautePerguntaID == leiautePergunta.LeiautePerguntaID);
+            LeiautePergunta result = BuscarLeiautePergunta().SingleOrDefault(d => d.LeiautePerguntaID == leiautePergunta.LeiautePerguntaID);
 
             if (result == null)
             {
-                using (var repo = factory.Get().GetRepository<LeiautePergunta>())
+                using (IRepository<LeiautePergunta> repo = factory.Get().GetRepository<LeiautePergunta>())
                 {
                     result = repo.Insert(leiautePergunta);
                 }
@@ -338,7 +361,7 @@ namespace Formulario.Business
 
             result.ControleAtualizacao = ControleUsuario.Criar(UsuarioID);
 
-            foreach (var item in leiautePergunta.LeiauteItem.ToList())
+            foreach (LeiautePerguntaItem item in leiautePergunta.LeiauteItem.ToList())
             {
                 GravarLeiautePerguntaItem(item, UsuarioID);
             }
@@ -346,10 +369,10 @@ namespace Formulario.Business
 
         private void GravarLeiautePerguntaItem(LeiautePerguntaItem leiautePerguntaItem, string UsuarioID)
         {
-            var result = BuscarLeiautePerguntaItem().SingleOrDefault(d => d.LeiautePerguntaItemID == leiautePerguntaItem.LeiautePerguntaID);
+            LeiautePerguntaItem result = BuscarLeiautePerguntaItem().SingleOrDefault(d => d.LeiautePerguntaItemID == leiautePerguntaItem.LeiautePerguntaID);
             if (result == null)
             {
-                using (var repo = factory.Get().GetRepository<LeiautePerguntaItem>())
+                using (IRepository<LeiautePerguntaItem> repo = factory.Get().GetRepository<LeiautePerguntaItem>())
                 {
                     result = repo.Insert(leiautePerguntaItem);
                 }
@@ -366,7 +389,7 @@ namespace Formulario.Business
 
         public IQueryable<LeiautePergunta> BuscarLeiautePergunta(bool trackingChanges = true)
         {
-            using (var repo = factory.Get().GetRepository<LeiautePergunta>())
+            using (IRepository<LeiautePergunta> repo = factory.Get().GetRepository<LeiautePergunta>())
             {
                 return repo.GetQuery();
             }
@@ -374,7 +397,7 @@ namespace Formulario.Business
 
         public IQueryable<LeiautePerguntaItem> BuscarLeiautePerguntaItem(bool trackingChanges = true)
         {
-            using (var repo = factory.Get().GetRepository<LeiautePerguntaItem>())
+            using (IRepository<LeiautePerguntaItem> repo = factory.Get().GetRepository<LeiautePerguntaItem>())
             {
                 return repo.GetQuery();
             }
@@ -382,14 +405,14 @@ namespace Formulario.Business
 
         public void ExcluirLeiautePergunta(long leiautePerguntaID)
         {
-            var leiaute = BuscarLeiautePergunta().Single(c => c.LeiautePerguntaID == leiautePerguntaID);
+            LeiautePergunta leiaute = BuscarLeiautePergunta().Single(c => c.LeiautePerguntaID == leiautePerguntaID);
 
-            foreach (var item in leiaute.LeiauteItem.ToList())
+            foreach (LeiautePerguntaItem item in leiaute.LeiauteItem.ToList())
             {
                 ExcluirLeiautePerguntaItem(item.LeiautePerguntaItemID);
             }
 
-            using (var repo = factory.Get().GetRepository<LeiautePergunta>())
+            using (IRepository<LeiautePergunta> repo = factory.Get().GetRepository<LeiautePergunta>())
             {
                 repo.Delete(leiaute);
             }
@@ -397,8 +420,8 @@ namespace Formulario.Business
 
         public void ExcluirLeiautePerguntaItem(long leiautePerguntaItemID)
         {
-            var leiautePerguntaItem = BuscarLeiautePerguntaItem().Single(d => d.LeiautePerguntaItemID == leiautePerguntaItemID);
-            using (var repo = factory.Get().GetRepository<LeiautePerguntaItem>())
+            LeiautePerguntaItem leiautePerguntaItem = BuscarLeiautePerguntaItem().Single(d => d.LeiautePerguntaItemID == leiautePerguntaItemID);
+            using (IRepository<LeiautePerguntaItem> repo = factory.Get().GetRepository<LeiautePerguntaItem>())
             {
                 repo.Delete(leiautePerguntaItem);
             }
@@ -408,7 +431,7 @@ namespace Formulario.Business
         #region Implementation methods
         public int Commit(string UserID)
         {
-            var result = unitOfWork.Commit(UserID);
+            int result = unitOfWork.Commit(UserID);
             return result;
         }
 
@@ -457,7 +480,7 @@ namespace Formulario.Business
 
             pergunta.AtribuirPergunta(perguntaDTO);
 
-            foreach (var item in perguntaDTO.LeiautePergunta)
+            foreach (LeiautePerguntaDTO item in perguntaDTO.LeiautesPergunta)
             {
                 pergunta.LeiautePerguntas.Add(CriarLeiautePergunta(item));
             }
@@ -467,7 +490,7 @@ namespace Formulario.Business
 
         protected eTipoPergunta CreateTipoPergunta(Pergunta p)
         {
-            var tipoPergunta = (
+            eTipoPergunta tipoPergunta = (
                     p is PerguntaTexto ? eTipoPergunta.Texto :
                     p is PerguntaAnexo ? eTipoPergunta.Anexo :
                     p is PerguntaEscolhaUnica ? eTipoPergunta.EscolhaUnica :
@@ -483,13 +506,13 @@ namespace Formulario.Business
         {
             try
             {
-                var pCondicional = p.PerguntaCondicional;
+                PerguntaCondicional pCondicional = p.PerguntaCondicional;
 
-                var tipoPergunta = CreateTipoPergunta(p);
+                eTipoPergunta tipoPergunta = CreateTipoPergunta(p);
 
                 PerguntaCondicionalDTO perguntaCondicionalDTO = CriarPerguntaCondicionalDTO(p.PerguntaCondicional);
 
-                var pergunta = new PerguntaDTO
+                PerguntaDTO pergunta = new PerguntaDTO
                 {
                     Descricao = p.Descricao,
                     TipoPergunta = tipoPergunta,
@@ -503,19 +526,19 @@ namespace Formulario.Business
                     //PerguntasGrade = null,
                     //GradeOpcoes = null,
                     Opcoes = null,
-                    Validador = null,
+                    ValidadorID = null,
                     PatternRegex = null,
                     TipoEntrada = p.TipoEntradaID,
-                    LeiautePergunta = p.LeiautePerguntas.Select(c => new LeiautePerguntaDTO
+                    LeiautesPergunta = p.LeiautePerguntas.Select(c => new LeiautePerguntaDTO
                     {
                         LeiautePerguntaID = c.LeiautePerguntaID,
                         PerguntaID = c.PerguntaID,
-                        LeiauteItem = c.LeiauteItem.Select(d => new LeiautePerguntaItemDTO
+                        LeiautesPerguntaItem = c.LeiauteItem.Select(d => new LeiautePerguntaItemDTO
                         {
                             LeiautePerguntaID = d.LeiautePerguntaID,
                             LeiautePerguntaItemID = d.LeiautePerguntaItemID,
-                            Responsivo = d.Responsivo,
-                            Tamanho = d.Tamanho,
+                            TamanhoTela = d.Responsivo,
+                            Coluna = d.Tamanho,
                         }).ToList()
                     }).ToList()
                 };
@@ -523,11 +546,11 @@ namespace Formulario.Business
                 switch (tipoPergunta)
                 {
                     case eTipoPergunta.Texto:
-                        var pTexto = p as PerguntaTexto;
+                        PerguntaTexto pTexto = p as PerguntaTexto;
                         pergunta.PatternRegex = pTexto.PatternRegex;
                         pergunta.TamanhoMaximo = pTexto.TamanhoMaximo;
-                        pergunta.Validador = (short?)pTexto.TipoValidadorID;
-                        pergunta.TipoEntrada = (byte)pTexto.TipoEntradaID;
+                        pergunta.ValidadorID = (short?)pTexto.TipoValidadorID;
+                        pergunta.TipoEntrada = pTexto.TipoEntradaID;
                         break;
                     case eTipoPergunta.EscolhaUnica:
                     case eTipoPergunta.MultiplaEscolha:
@@ -535,33 +558,33 @@ namespace Formulario.Business
                         break;
                     case eTipoPergunta.Grade:
 
-                        var pGrade = (p as Perguntas.PerguntaGradeDeOpcoes);
+                        PerguntaGradeDeOpcoes pGrade = (p as Perguntas.PerguntaGradeDeOpcoes);
                         pergunta.Opcoes = (p as Perguntas.PerguntaGradeDeOpcoes).Opcoes
                             .Select(c => new OpcaoDTO { OpcaoID = c.OpcaoID, Descricao = c.Descricao }).ToList();
                         pergunta.LinhasGrade = (p as Perguntas.PerguntaGradeDeOpcoes).Linhas
                             .Select(c => new LinhasGradeDTO { LinhaID = c.LinhaPerguntaGradeID, Descricao = c.Titulo }).ToList();
                         break;
                     case eTipoPergunta.Anexo:
-                        var pAnexo = p as PerguntaAnexo;
-                        pergunta.TipoEntrada = (byte)pAnexo.TipoEntradaID;
+                        PerguntaAnexo pAnexo = p as PerguntaAnexo;
+                        pergunta.TipoEntrada = pAnexo.TipoEntradaID;
                         break;
                     case eTipoPergunta.Numero:
-                        var pNumero = p as PerguntaNumero;
-                        pergunta.TipoEntrada = (byte)pNumero.TipoEntradaID;
+                        PerguntaNumero pNumero = p as PerguntaNumero;
+                        pergunta.TipoEntrada = pNumero.TipoEntradaID;
                         pergunta.CasasDecimais = pNumero.CasasDecimais;
                         pergunta.Prefixo = pNumero.Prefixo;
                         pergunta.Sufixo = pNumero.Sufixo;
                         break;
                     case eTipoPergunta.Data:
-                        var pData = p as PerguntaData;
-                        pergunta.TipoEntrada = (byte)pData.TipoEntradaID;
+                        PerguntaData pData = p as PerguntaData;
+                        pergunta.TipoEntrada = pData.TipoEntradaID;
                         break;
                     default:
                         throw new NotImplementedException();
                 }
 
                 pergunta.TipoEntrada = p.TipoEntradaID;
-                pergunta.Validador = (short?)p.TipoValidadorID;
+                pergunta.ValidadorID = (short?)p.TipoValidadorID;
 
                 return pergunta;
             }
@@ -574,9 +597,11 @@ namespace Formulario.Business
         protected PerguntaCondicionalDTO CriarPerguntaCondicionalDTO(PerguntaCondicional pCondicional)
         {
             if (pCondicional == null)
+            {
                 return null;
+            }
 
-            var tipoPerguntaCondicional = (
+            eTipoPergunta tipoPerguntaCondicional = (
                pCondicional is PerguntaCondicionalData ? eTipoPergunta.Texto :
                pCondicional is PerguntaCondicionalAnexo ? eTipoPergunta.Anexo :
                pCondicional is PerguntaCondicionalUnica ? eTipoPergunta.EscolhaUnica :
@@ -584,7 +609,7 @@ namespace Formulario.Business
                pCondicional is PerguntaCondicionalNumero ? eTipoPergunta.Numero :
                pCondicional is PerguntaCondicionalData ? eTipoPergunta.Data : new eTipoPergunta?()).Value;
 
-            var perguntaCondicionalDTO = new PerguntaCondicionalDTO();
+            PerguntaCondicionalDTO perguntaCondicionalDTO = new PerguntaCondicionalDTO();
 
             switch (tipoPerguntaCondicional)
             {
@@ -662,7 +687,7 @@ namespace Formulario.Business
         {
             try
             {
-                var resposta = new RespostaDTO
+                RespostaDTO resposta = new RespostaDTO
                 {
                     OpcaoID = null,
                     Opcoes = null,
@@ -676,19 +701,19 @@ namespace Formulario.Business
                 switch (CreateTipoPergunta(r.Pergunta))
                 {
                     case eTipoPergunta.Texto:
-                        var rTexto = r as RespostaTexto;
+                        RespostaTexto rTexto = r as RespostaTexto;
                         resposta.Valor = rTexto.Valor;
                         break;
                     case eTipoPergunta.EscolhaUnica:
-                        var rUnica = r as RespostaUnica;
+                        RespostaUnica rUnica = r as RespostaUnica;
                         resposta.OpcaoID = rUnica.OpcaoEscolhidaID;
                         break;
                     case eTipoPergunta.MultiplaEscolha:
-                        var rOpcoes = r as RespostaMultipla;
+                        RespostaMultipla rOpcoes = r as RespostaMultipla;
                         resposta.Opcoes = rOpcoes.OpcoesEscolhida.Select(c => c.OpcaoID).ToList();
                         break;
                     case eTipoPergunta.Grade:
-                        var rGrade = r as RespostaGrade;
+                        RespostaGrade rGrade = r as RespostaGrade;
                         resposta.RespostaGrade = rGrade.Respostas.Select(c => new RespostaGradeDTO
                         {
                             LinhaPerguntaGradeID = c.LinhaPerguntaGradeID,
@@ -696,16 +721,16 @@ namespace Formulario.Business
                         }).ToList();
                         break;
                     case eTipoPergunta.Anexo:
-                        var rAnexo = r as RespostaAnexo;
+                        RespostaAnexo rAnexo = r as RespostaAnexo;
                         //Lazy to performance
                         resposta.Valor = new { rAnexo.Valor.AnexoID, rAnexo.Valor.Nome, rAnexo.Valor.Extensao };
                         break;
                     case eTipoPergunta.Numero:
-                        var rNumero = r as RespostaNumero;
+                        RespostaNumero rNumero = r as RespostaNumero;
                         resposta.Valor = rNumero.Valor;
                         break;
                     case eTipoPergunta.Data:
-                        var rData = r as RespostaData;
+                        RespostaData rData = r as RespostaData;
                         resposta.Valor = rData.Valor;
                         break;
                     default:
@@ -765,17 +790,17 @@ namespace Formulario.Business
 
         protected LeiautePergunta CriarLeiautePergunta(LeiautePerguntaDTO leiautePergunta)
         {
-            var result = new LeiautePergunta
+            LeiautePergunta result = new LeiautePergunta
             {
                 LeiautePerguntaID = leiautePergunta.LeiautePerguntaID,
                 PerguntaID = leiautePergunta.PerguntaID,
-                LeiauteItem = leiautePergunta.LeiauteItem.Select(d =>
+                LeiauteItem = leiautePergunta.LeiautesPerguntaItem.Select(d =>
                 new LeiautePerguntaItem
                 {
                     LeiautePerguntaID = d.LeiautePerguntaID,
                     LeiautePerguntaItemID = d.LeiautePerguntaItemID,
-                    Responsivo = d.Responsivo,
-                    Tamanho = d.Tamanho,
+                    Responsivo = d.TamanhoTela,
+                    Tamanho = d.Coluna,
                 }).ToList()
             };
 
@@ -784,7 +809,7 @@ namespace Formulario.Business
 
         public T CreateInstance<T>() where T : class
         {
-            using (var repo = factory.Get().GetRepository<T>())
+            using (IRepository<T> repo = factory.Get().GetRepository<T>())
             {
                 return repo.Create();
             }
@@ -792,9 +817,9 @@ namespace Formulario.Business
 
         public ModeloDeFormulario ExcluirModeloFormulario(long id)
         {
-            using (var repo = factory.Get().GetRepository<ModeloDeFormulario>())
+            using (IRepository<ModeloDeFormulario> repo = factory.Get().GetRepository<ModeloDeFormulario>())
             {
-                var modelo = repo.GetQuery().Single(d => d.ModeloFormularioID == id);
+                ModeloDeFormulario modelo = repo.GetQuery().Single(d => d.ModeloFormularioID == id);
                 repo.Delete(modelo);
                 return modelo;
             }
@@ -802,9 +827,9 @@ namespace Formulario.Business
 
         public RespostaModeloDeFormulario ExcluirRespostaModeloFormulario(long id)
         {
-            using (var repo = factory.Get().GetRepository<RespostaModeloDeFormulario>())
+            using (IRepository<RespostaModeloDeFormulario> repo = factory.Get().GetRepository<RespostaModeloDeFormulario>())
             {
-                var resposta = repo.GetQuery().Single(d => d.RespostaModeloFormularioID == id);
+                RespostaModeloDeFormulario resposta = repo.GetQuery().Single(d => d.RespostaModeloFormularioID == id);
                 repo.Delete(resposta);
                 return resposta;
             }

@@ -22,7 +22,7 @@ namespace Formulario.Business.DTO
         /// <summary>
         /// Itens de leiaute da pergunta (tamanho e tamanho de coluna)
         /// </summary>
-        public List<LeiautePerguntaItemDTO> LeiauteItem { get; set; }
+        public List<LeiautePerguntaItemDTO> LeiautesPerguntaItem { get; set; }
 
         public static LeiautePerguntaDTO LeiautePadrao(PerguntaDTO p)
         {
@@ -31,11 +31,11 @@ namespace Formulario.Business.DTO
             {
                 LeiautePerguntaID = 0,
                 PerguntaID = p.PerguntaID,
-                LeiauteItem = new List<LeiautePerguntaItemDTO>{
+                LeiautesPerguntaItem = new List<LeiautePerguntaItemDTO>{
                       new LeiautePerguntaItemDTO
                       {
-                            Responsivo = eTamanhoTela.Mobile,
-                             Tamanho = eColunas.T12
+                            TamanhoTela = eTamanhoTela.Mobile,
+                             Coluna = eColunas.T12
                       } }
             };
         }

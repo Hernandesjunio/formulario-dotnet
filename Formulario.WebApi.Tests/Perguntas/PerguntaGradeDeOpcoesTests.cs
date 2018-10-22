@@ -33,7 +33,7 @@ namespace Formulario.Business.Perguntas.Tests
                 TamanhoMaximoBytes = 100,
                 Titulo = "Titulo",
                 UsuarioID = "ADMIN",
-                Validador = (byte)eTipoValidador.Texto_Regex,
+                ValidadorID = (byte)eTipoValidador.Texto_Regex,
                 Opcoes = new List<OpcaoDTO>
                  {
                      new OpcaoDTO{ OpcaoID=1, Descricao="M" },

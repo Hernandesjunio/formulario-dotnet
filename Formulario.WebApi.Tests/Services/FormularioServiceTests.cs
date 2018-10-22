@@ -118,7 +118,7 @@ namespace Formulario.Business.Tests
             Assert.AreEqual("S", p5.Sufixo);
             Assert.AreEqual(true, p5.Obrigatorio);
             Assert.AreEqual((byte)eTipoEntrada.Numero_CaixaDeTexto, p5.TipoEntrada);
-            Assert.AreEqual((short?)eTipoValidador.Numero_MaiorIgualZero, p5.Validador);
+            Assert.AreEqual((short?)eTipoValidador.Numero_MaiorIgualZero, p5.ValidadorID);
 
             var p6 = formulario.Perguntas.Single(c => c.PerguntaID == 6);
             Assert.AreEqual("Teste Condicional", p6.Titulo);
@@ -144,6 +144,13 @@ namespace Formulario.Business.Tests
             Assert.AreEqual("C#", p7.LinhasGrade[0].Descricao);
             Assert.AreEqual("Java", p7.LinhasGrade[1].Descricao);
             Assert.IsNull(p7.PerguntaCondicional);
+
+            string serializado = Newtonsoft.Json.JsonConvert.SerializeObject(formulario, Newtonsoft.Json.Formatting.None, 
+                new Newtonsoft.Json.JsonSerializerSettings
+            {
+                  
+            }
+            );
         }
 
         [TestMethod()]

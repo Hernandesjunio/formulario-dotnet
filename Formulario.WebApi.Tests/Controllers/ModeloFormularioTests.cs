@@ -104,7 +104,7 @@ namespace Formulario.WebApi.Controllers.Tests
                 TamanhoMaximoBytes = 100,
                 Titulo = "Titulo",
                 UsuarioID = "ADMIN",
-                Validador = (byte)eTipoValidador.Texto_Regex,
+                ValidadorID = (byte)eTipoValidador.Texto_Regex,
             };
 
             var modeloFormulario = new ModeloFormularioDTO

@@ -42,7 +42,7 @@ namespace Formulario.Business.DTO
         public bool Obrigatorio { get; set; }
 
         /// <summary>
-        /// Opções de pergunta única e múltipla e grade
+        /// Opções de pergunta única, múltipla e grade
         /// </summary>
         public List<OpcaoDTO> Opcoes { get; set; } 
 
@@ -84,12 +84,12 @@ namespace Formulario.Business.DTO
         /// <summary>
         /// Tipo do validador da entrada do dado
         /// </summary>
-        public short? Validador { get; set; }
+        public short? ValidadorID { get; set; }
 
         /// <summary>
         /// Leiaute da pergunta para responsividade
         /// </summary>
-        public List<LeiautePerguntaDTO> LeiautePergunta { get; set; } = new List<LeiautePerguntaDTO>();
+        public List<LeiautePerguntaDTO> LeiautesPergunta { get; set; } = new List<LeiautePerguntaDTO>();
 
         /// <summary>
         /// Prefixo para número

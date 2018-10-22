@@ -1,11 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Formulario.Business;
-using System;
-using System.Collections.Generic;
+﻿using Formulario.Business.Perguntas;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Formulario.Business.Perguntas;
 
 namespace Formulario.Business.Tests
 {
@@ -26,11 +21,11 @@ namespace Formulario.Business.Tests
 
             modelo.AtribuirLeiautePerguntasPadrao();
 
-            foreach (var item in modelo.Perguntas)
+            foreach (Pergunta item in modelo.Perguntas)
             {
                 Assert.AreEqual(eColunas.T12, item.LeiautePerguntas.Single().LeiauteItem.First().Tamanho);
                 Assert.AreEqual(eTamanhoTela.Mobile, item.LeiautePerguntas.Single().LeiauteItem.First().Responsivo);
-            }
+            }            
         }
     }
 }

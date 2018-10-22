@@ -4,14 +4,19 @@ using Formulario.Business.DTO;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 
 namespace Formulario.WebApi2.Controllers
 {
+   
+
     [RoutePrefix("api/respostamodelodeformulario")]
     public class RespostaModeloFormularioController : BaseAPIController
     {
@@ -22,12 +27,21 @@ namespace Formulario.WebApi2.Controllers
             this.svc = svc;
         }
 
+        [Route("ping/test")]
+        [HttpGet]
+        public async Task<IHttpActionResult> Ping()
+        {
+            var r = await Task.FromResult("Pong");
+
+            return Ok(r);
+        }
+              
         [HttpGet]
         [Route("all")]
         public async Task<IHttpActionResult> GetAll([FromUri]Filter<RespostaModeloDeFormulario> filter)
         {
-            var queryResposta = svc.Value.BuscarRespostaModeloDeFormulario(false);
-            var query = svc.Value.BuscarRespostaModeloDeFormulario(false);
+            IQueryable<RespostaModeloDeFormulario> queryResposta = svc.Value.BuscarRespostaModeloDeFormulario(false);
+            IQueryable<RespostaModeloDeFormulario> query = svc.Value.BuscarRespostaModeloDeFormulario(false);
             var result = await filter.ApplyFilter(query)
                 .Select(c => new
                 {
@@ -40,12 +54,12 @@ namespace Formulario.WebApi2.Controllers
             return Ok(result);
 
         }
-                
+
         [HttpGet]
         [Route("{id}")]
         public async Task<IHttpActionResult> Get(long id)
         {
-            var result = await Task.FromResult(svc.Value.AbrirRespostaModeloFormulario(id));
+            RespostaModeloFormularioDTO result = await Task.FromResult(svc.Value.AbrirRespostaModeloFormulario(id));
             return Ok(result);
         }
 
@@ -53,12 +67,14 @@ namespace Formulario.WebApi2.Controllers
         [Route("")]
         public async Task<IHttpActionResult> Post([FromBody]RespostaModeloFormularioDTO value)
         {
-            var modelo = await Task.FromResult(svc.Value.GravarRespostaModeloFormulario(value, UserID));
+            RespostaModeloDeFormulario modelo = await Task.FromResult(svc.Value.GravarRespostaModeloFormulario(value, UserID));
 
             await svc.Value.CommitAsync(UserID);
 
             if (Request.Headers.TryGetValues("ResultObject", out IEnumerable<string> lst))
+            {
                 return Ok(svc.Value.AbrirRespostaModeloFormulario(modelo.RespostaModeloFormularioID));
+            }
 
             return Ok(modelo.RespostaModeloFormularioID);
         }
@@ -67,12 +83,14 @@ namespace Formulario.WebApi2.Controllers
         [Route("")]
         public async Task<IHttpActionResult> Put([FromBody]RespostaModeloFormularioDTO value)
         {
-            var modelo = await Task.FromResult(svc.Value.GravarRespostaModeloFormulario(value, UserID));
+            RespostaModeloDeFormulario modelo = await Task.FromResult(svc.Value.GravarRespostaModeloFormulario(value, UserID));
 
             await svc.Value.CommitAsync(UserID);
 
             if (Request.Headers.TryGetValues("ResultObject", out IEnumerable<string> lst))
+            {
                 return Ok(svc.Value.AbrirRespostaModeloFormulario(modelo.RespostaModeloFormularioID));
+            }
 
             return Ok(modelo.RespostaModeloFormularioID);
         }
@@ -84,9 +102,13 @@ namespace Formulario.WebApi2.Controllers
             object result;
 
             if (Request.Headers.TryGetValues(Response, out IEnumerable<string> lst))
+            {
                 result = svc.Value.AbrirRespostaModeloFormulario(id);
+            }
             else
+            {
                 result = id;
+            }
 
             await Task.FromResult(svc.Value.ExcluirRespostaModeloFormulario(id));
 
