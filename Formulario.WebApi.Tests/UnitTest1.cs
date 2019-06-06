@@ -1,55 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using Formulario.Business.Class;
 using Formulario.Business.Perguntas;
+using Formulario.Data.Infrastructure;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq.Dynamic;
-using Formulario.WebApi.Controllers;
-using Formulario.Business;
-using Formulario.Business.Class;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Formulario.WebApi.Tests
 {
     [TestClass]
     public class UnitTest1
     {
+
+        [TestMethod]
+        public void Db()
+        {
+            FormularioContext f = new FormularioContext();
+            f.Pergunta.ToList();
+        }
+
         [TestMethod]
         public void TestMethod1()
         {
 
-            var lst = new List<PerguntaTexto>();
-
-
-            lst.Add(new PerguntaTexto
+            List<PerguntaTexto> lst = new List<PerguntaTexto>
             {
-                PerguntaID = 1,
-                Descricao = "Nome"
-            });
+                new PerguntaTexto
+                {
+                    PerguntaID = 1,
+                    Descricao = "Nome"
+                },
 
-            lst.Add(new PerguntaTexto
-            {
-                PerguntaID = 2,
-                Descricao = "Sobrenome"
-            });
+                new PerguntaTexto
+                {
+                    PerguntaID = 2,
+                    Descricao = "Sobrenome"
+                },
 
-            lst.Add(new PerguntaTexto
-            {
-                PerguntaID = 3,
-                Descricao = "Telefone"
-            });
+                new PerguntaTexto
+                {
+                    PerguntaID = 3,
+                    Descricao = "Telefone"
+                },
 
-            lst.Add(new PerguntaTexto
-            {
-                PerguntaID = 4,
-                Descricao = "Idade"
-            });
+                new PerguntaTexto
+                {
+                    PerguntaID = 4,
+                    Descricao = "Idade"
+                }
+            };
 
-            var operators = new[] { "=", "<=", ">=", "<", ">", "Contains", "StartsWith", "EndsWith" };
+            string[] operators = new[] { "=", "<=", ">=", "<", ">", "Contains", "StartsWith", "EndsWith" };
 
-            var propertyName = "PerguntaID";
-            var filter = new Filter<PerguntaTexto>();
+            string propertyName = "PerguntaID";
+            Filter<PerguntaTexto> filter = new Filter<PerguntaTexto>();
 
             filter.ColumnsFilter.Add(new ColumnFilter
             {
@@ -64,7 +67,7 @@ namespace Formulario.WebApi.Tests
             filter.SortBy = "PerguntaID";
             filter.Descending = false;
 
-            var result = filter.ApplyFilter(lst.AsQueryable()).ToList();
+            List<PerguntaTexto> result = filter.ApplyFilter(lst.AsQueryable()).ToList();
 
         }
     }
